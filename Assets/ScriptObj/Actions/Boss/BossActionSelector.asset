@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: BossActionSelector
   m_EditorClassIdentifier: 
   actions:
+  - {fileID: 11400000, guid: bbcb3b0620eb8df4cb31909277cfe95d, type: 2}
+  - {fileID: 11400000, guid: ba1e106f7dd2bf446b205e62addbea8f, type: 2}
   - {fileID: 11400000, guid: 96f6c2e15482ea643861d955a3e976d2, type: 2}
   - {fileID: 11400000, guid: bfadb775f46d44740858f2d905c62c78, type: 2}

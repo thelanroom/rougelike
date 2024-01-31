@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8775bdc0acfe4ad4da4fd6da98b581f1, type: 3}
+  m_Name: BossAtk2Sequence
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: 97f614e8b7294924a9b25503e3ede9ec, type: 2}
+  - {fileID: 11400000, guid: 7522f52d432cc584f952b0c3f31b1ef1, type: 2}

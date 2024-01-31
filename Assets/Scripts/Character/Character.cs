@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using UnityEngine;
 public enum CharacterState
 {
     Spawn,
+    Ready,
     Idle,
     Walking,
     Attacking,
@@ -15,7 +17,7 @@ public enum CharacterState
 
 public class Character : MonoBehaviour
 {
-    public Transform target;
+    public Character target;
 
     [Header("Character profile")]
     public CharacterProfile profile;
@@ -23,7 +25,7 @@ public class Character : MonoBehaviour
 
     [Header("Skills")]
     public List<Skill> skillList;
-    private Dictionary<string, Skill> _skillMap;
+    private Dictionary<string, float> _skillsCooldownMap = new Dictionary<string, float>();
 
     public Vector2 MoveInput { get; set; }
     public Vector3? AttackDirection { get; set; }
@@ -44,10 +46,11 @@ public class Character : MonoBehaviour
     private CharacterUI _characterUI;
     private CharacterController _controller;
 
-    public string CurrentAnimState { get; private set; }
-
     private float _currentHealth = 0;
-    public float CurrentHealth
+
+    public Action OnCharacterDie { get;set; }
+
+    public float CurrentHP
     {
         get
         {
@@ -56,13 +59,16 @@ public class Character : MonoBehaviour
         private set
         {
             _currentHealth = value;
-            _characterUI.UpdateHealthBar(_currentHealth / profile.baseHealth);
+            _characterUI.UpdateHealthBar(_currentHealth / profile.baseHP);
         }
     }
+
+    public float DamageReceived { get; private set; }
 
 
     public Weapon Weapon { get; private set; }
     public CharacterState CurrentState { get; private set; }
+
 
     private void Awake()
     {
@@ -72,14 +78,18 @@ public class Character : MonoBehaviour
         Weapon = GetComponentInChildren<Weapon>();
     }
 
-    private void Start()
-    {
-        CurrentHealth = profile.baseHealth;
-    }
-
     private void Update()
     {
+        if (CurrentState == CharacterState.Spawn) return;
+
+        UpdateSkillsCoodown();
         profile.rootAction.ProcessUpdate(this);
+    }
+
+    public void Reset()
+    {
+        _currentHealth = profile.baseHP;
+        SetCharacterState(CharacterState.Spawn);
     }
 
     public void Move()
@@ -115,13 +125,6 @@ public class Character : MonoBehaviour
         _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime));
     }
 
-    public void UseSkill(Skill skill, string anim)
-    {
-        transform.rotation = Quaternion.LookRotation((Vector3)AttackDirection);
-        Weapon.EnableDealDamge(skill.Damage);
-        SetCharacterState(CharacterState.Attacking, anim);
-    }
-
     public void PlayAnimState(string name)
     {
         _animator.CrossFadeInFixedTime(name, 0.2f, 0);
@@ -131,22 +134,16 @@ public class Character : MonoBehaviour
     // Use for atk anims
     public void OnAnimEnd(string name)
     {
-        SetCharacterState(CharacterState.Idle, "");
+        SetCharacterState(CharacterState.Idle, "Idle");
         AttackDirection = null;
+        DamageReceived = 0;
     }
 
     public void GetHit(float damage)
     {
         Debug.Log($"{gameObject.name} get hit -{damage} hp");
-        CurrentHealth -= damage;
-        /*  if(CurrentHealth <= 0)
-          {
-              SetCharacterState(CharacterState.Die);
-          }
-          else
-          {
-              SetCharacterState(CharacterState.GetHit);
-          }*/
+        CurrentHP -= damage;
+        DamageReceived = damage;
     }
 
     public void SetCharacterState(CharacterState newState, string animState = "")
@@ -158,6 +155,36 @@ public class Character : MonoBehaviour
         if (string.IsNullOrEmpty(animState) == false)
         {
             PlayAnimState(animState);
+        }
+
+        if(CurrentState == CharacterState.Die)
+        {
+            OnCharacterDie?.Invoke();
+        }
+    }
+
+    public bool SkillInCooldown(string skillName)
+    {
+        if(_skillsCooldownMap.ContainsKey(skillName))
+        {
+            return _skillsCooldownMap[skillName] > 0;
+        }
+        return false;
+    }
+
+    public void RegisterSkillCooldown(string skillName, float cooldown)
+    {
+        _skillsCooldownMap[skillName] = cooldown;
+    }
+
+    private void UpdateSkillsCoodown()
+    {
+       if(_skillsCooldownMap.Count == 0) return;
+
+        for(int i = 0; i < _skillsCooldownMap.Count; i++)
+        {
+            var key = _skillsCooldownMap.ElementAt(i).Key;
+            if (_skillsCooldownMap[key] > 0) _skillsCooldownMap[key] -= Time.deltaTime;
         }
     }
 }

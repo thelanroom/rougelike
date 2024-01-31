@@ -9,9 +9,8 @@ public class ChaseAction : BaseBotNode<Character>
     public override BehaviourTreeStatus ProcessUpdate(Character character)
     {
 
-        if (character.target == null)//|| botController.characterCTRL.SurvivorState != SurvivorStateType.LIVE)
+        if (character.target == null || character.target.CurrentState == CharacterState.Die)
         {
-            character.target = null;
             character.MoveInput = Vector2.zero;
             return BehaviourTreeStatus.FAILURE;
         }

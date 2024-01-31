@@ -6,5 +6,5 @@ using UnityEngine;
 public class CharacterProfile : BaseBotProfile<Character>
 {
     public float baseSpeed;
-    public float baseHealth;
+    public float baseHP;
 }

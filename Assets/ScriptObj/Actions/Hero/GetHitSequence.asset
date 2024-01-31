@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8775bdc0acfe4ad4da4fd6da98b581f1, type: 3}
   m_Name: GetHitSequence
   m_EditorClassIdentifier: 
-  actions: []
+  actions:
+  - {fileID: 11400000, guid: 8a4a3884cd454184e885df86dd4ec961, type: 2}
+  - {fileID: 11400000, guid: 49c4df58a3d26c84998042dae0bee8d7, type: 2}

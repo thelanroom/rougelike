@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rootAction: {fileID: 11400000, guid: a86a62ceb6df84d47b1352895f853518, type: 2}
   baseSpeed: 4
-  baseHealth: 200
+  baseHP: 200

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: HeroActionSelector
   m_EditorClassIdentifier: 
   actions:
+  - {fileID: 11400000, guid: bbcb3b0620eb8df4cb31909277cfe95d, type: 2}
+  - {fileID: 11400000, guid: 18098b4813702d040a80d1a1234b942f, type: 2}
   - {fileID: 11400000, guid: 1d5c2d7c12d8305479bf15a2a6d88f1c, type: 2}
   - {fileID: 11400000, guid: 991078d802b3e8c4bb8aadb4fdd3306a, type: 2}
   - {fileID: 11400000, guid: 4e42effeb58919e4ea5ba74956e15f1c, type: 2}

@@ -7,7 +7,7 @@ public class CheckPlayerInput : BaseBotNode<Character>
 {
     public override BehaviourTreeStatus ProcessUpdate(Character character)
     {
-        if(character.MoveInput == Vector2.zero)
+        if( character.MoveInput == Vector2.zero)
         {
             return BehaviourTreeStatus.FAILURE;
         }
